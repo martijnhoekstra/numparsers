@@ -10,19 +10,22 @@ import java.util.concurrent.TimeUnit
 @Fork(1)
 @State(Scope.Benchmark)
 class OverflowByteBenchmarks {
-  import Parsers._
+  import StringConversions._
+  import scala.util.Try
 
-  @Param(Array("+128", "-129", "-123456789"))
-  var overflow: String = _
-
-  @Benchmark
-  def wrappedbaselineOverflow: Option[Byte] = parseByteWrapped(overflow)
+  @Param(Array("+128", "-129"))
+  var value: String = _
 
   @Benchmark
-  def byte1Overflow: Option[Byte] = parseByteManually(overflow)
+  def wrappedBaselineOverflow: Option[Byte] = Try(value.toByte).toOption
 
   @Benchmark
-  def byte2Overflow: Option[Byte] = parseByteManually2(overflow)
+  def wrappedFastOverflow: Option[Byte] = Try(fastByte(value)).toOption
+
+  @Benchmark
+  def byteOverflow: Option[Byte] = parseByte(value)
+
+  
 
 }
 

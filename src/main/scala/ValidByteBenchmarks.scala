@@ -11,26 +11,19 @@ import java.util.concurrent.TimeUnit
 @Fork(1)
 @State(Scope.Benchmark)
 class ValidByteBenchmarks {
-import Parsers._
-
-  
-  @Param(Array("1", "100", "127", "-128", "-0000000123"))
-  var validbyte: String = _
-
-/*
-  @Benchmark
-  def baselineValid: Byte = java.lang.Byte.parseByte(validbyte)
+import StringConversions._
+    
+  @Param(Array("1", "127", "-128"))
+  var value: String = _
 
   @Benchmark
-  def wrappedbaselineValid: Option[Byte] = parseByteWrapped(validbyte)
-
-
-  @Benchmark
-  def byte1Valid: Option[Byte] = parseByteManually(validbyte)
-  */
+  def baselineValid: Byte = java.lang.Byte.parseByte(value)
 
   @Benchmark
-  def byte2Valid: Option[Byte] = parseByteManually2(validbyte)
+  def fastValid: Byte = fastByte(value)
+
+  @Benchmark
+  def safeValid: Option[Byte] = parseByte(value)
 
 }
 

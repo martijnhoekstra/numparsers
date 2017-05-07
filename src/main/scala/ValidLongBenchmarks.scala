@@ -10,20 +10,20 @@ import java.util.concurrent.TimeUnit
 @Measurement(iterations = 15, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(1)
 @State(Scope.Benchmark)
-class ValidShortBenchmarks {
+class ValidLongBenchmarks {
 import StringConversions._
 
-  @Param(Array("1", "100", "-32768", "32767"))
+  @Param(Array("1", "10000000", "1000000000000", "1000000000000", "1000000000000000", "-9223372036854775808", "9223372036854775807"))
   var value: String = _
 
   @Benchmark
-  def intbaseline = java.lang.Short.parseShort(value)
+  def intbaseline = java.lang.Long.parseLong(value)
 
   @Benchmark
-  def safeValid: Option[Short] = parseShort(value)
+  def safeValid: Option[Long] = parseLong(value)
 
   @Benchmark
-  def fastValid: Short = fastShort(value)
+  def fastValid: Long = fastLong(value)
 
 }
 

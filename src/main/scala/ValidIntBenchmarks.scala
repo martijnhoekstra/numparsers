@@ -11,19 +11,19 @@ import java.util.concurrent.TimeUnit
 @Fork(1)
 @State(Scope.Benchmark)
 class ValidIntBenchmarks {
-import Parsers._
+import StringConversions._
 
-  @Param(Array("1", "100", "1000", "10000", "-2147483648", "2147483647"))
-  var valid: String = _
-
-  @Benchmark
-  def intbaseline = java.lang.Integer.parseInt(valid)
+  @Param(Array("1", "100000", "-2147483648", "2147483647"))
+  var value: String = _
 
   @Benchmark
-  def alg1: Option[Int] = parseIntManually(valid)
+  def intbaseline = java.lang.Integer.parseInt(value)
 
   @Benchmark
-  def alg2: Option[Int] = parseIntManually2(valid)
+  def safeValid: Option[Int] = parseInt(value)
+
+  @Benchmark
+  def fastValid: Int = fastInt(value)
 
 }
 
